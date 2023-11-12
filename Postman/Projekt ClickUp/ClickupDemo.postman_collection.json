@@ -1,0 +1,198 @@
+{
+	"info": {
+		"_postman_id": "19b30365-2394-490c-9714-5b03ef68f0bf",
+		"name": "ClickupDemo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create a Space",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const json = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.collectionVariables.set('spaceId', json.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n  \"name\": \"Create Space Name\",\n  \"multiple_assignees\": true,\n  \"features\": {\n    \"due_dates\": {\n      \"enabled\": true,\n      \"start_date\": false,\n      \"remap_due_dates\": true,\n      \"remap_closed_due_date\": false\n    },\n    \"time_tracking\": {\n      \"enabled\": false\n    },\n    \"tags\": {\n      \"enabled\": true\n    },\n    \"time_estimates\": {\n      \"enabled\": true\n    },\n    \"checklists\": {\n      \"enabled\": true\n    },\n    \"custom_fields\": {\n      \"enabled\": true\n    },\n    \"remap_dependencies\": {\n      \"enabled\": true\n    },\n    \"dependency_warning\": {\n      \"enabled\": true\n    },\n    \"portfolios\": {\n      \"enabled\": true\n    }\n  }\n}"
+				},
+				"url": {
+					"raw": "{{url}}/team/30973979/space",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"team",
+						"30973979",
+						"space"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update a Space",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Updated Space Name\",\r\n    \"multiple_assignees\": false,\r\n    \"features\": {\r\n        \"due_dates\": {\r\n            \"enabled\": false,\r\n            \"start_date\": false,\r\n            \"remap_due_dates\": false,\r\n            \"remap_closed_due_date\": false\r\n        },\r\n        \"time_tracking\": {\r\n            \"enabled\": false\r\n        },\r\n        \"tags\": {\r\n            \"enabled\": false\r\n        },\r\n        \"time_estimates\": {\r\n            \"enabled\": false\r\n        },\r\n        \"checklists\": {\r\n            \"enabled\": true\r\n        },\r\n        \"custom_fields\": {\r\n            \"enabled\": true\r\n        },\r\n        \"remap_dependencies\": {\r\n            \"enabled\": false\r\n        },\r\n        \"dependency_warning\": {\r\n            \"enabled\": false\r\n        },\r\n        \"portfolios\": {\r\n            \"enabled\": false\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/space/:spaceId",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"space",
+						":spaceId"
+					],
+					"variable": [
+						{
+							"key": "spaceId",
+							"value": "{{spaceId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a Space",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const json = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should return empty object\", function () {\r",
+							"    pm.expect(json).to.be.empty;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/space/:id",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"space",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{spaceId}}"
+						}
+					]
+				},
+				"description": "Please paste the previously updated space_id for continuity"
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{token}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "Authorization",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "spaceId",
+			"value": ""
+		}
+	]
+}

@@ -1,0 +1,349 @@
+{
+	"info": {
+		"_postman_id": "0db5c102-27d5-422d-9097-5ae676c684c7",
+		"name": "ClickUp E2E",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create a Space",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const json = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.collectionVariables.set('spaceId', json.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n  \"name\": \"SPACE SCENARIO E2E\",\n  \"multiple_assignees\": true,\n  \"features\": {\n    \"due_dates\": {\n      \"enabled\": true,\n      \"start_date\": false,\n      \"remap_due_dates\": true,\n      \"remap_closed_due_date\": false\n    },\n    \"time_tracking\": {\n      \"enabled\": false\n    },\n    \"tags\": {\n      \"enabled\": true\n    },\n    \"time_estimates\": {\n      \"enabled\": true\n    },\n    \"checklists\": {\n      \"enabled\": true\n    },\n    \"custom_fields\": {\n      \"enabled\": true\n    },\n    \"remap_dependencies\": {\n      \"enabled\": true\n    },\n    \"dependency_warning\": {\n      \"enabled\": true\n    },\n    \"portfolios\": {\n      \"enabled\": true\n    }\n  }\n}"
+				},
+				"url": {
+					"raw": "{{url}}/team/{{teamId}}/space",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"team",
+						"{{teamId}}",
+						"space"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Folderless List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const json = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.collectionVariables.set('listId', json.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"ZADANIA\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/space/{{spaceId}}/list",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"space",
+						"{{spaceId}}",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create task",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const json = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should return response with correct name and description\", function () {\r",
+							"    pm.expect(json.name).to.eql(\"Przetestować clickup\");\r",
+							"    pm.expect(json.description).to.eql(\"Ciekawe jak to działa\");\r",
+							"});\r",
+							"\r",
+							"pm.collectionVariables.set('taskId', json.id);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Przetestować clickup\",\r\n    \"description\": \"Ciekawe jak to działa\",\r\n    \"status\": \"to do\",\r\n    \"priority\": null,\r\n    \"parent\": null,\r\n    \"time_estimate\": null,\r\n    \"assignees\": {},\r\n    \"archived\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/list/{{listId}}/task",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"list",
+						"{{listId}}",
+						"task"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update task name and description",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const json = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should return response with updated name and description\", function () {\r",
+							"    pm.expect(json.name).to.eql(\"Przetestować clickup i zobaczyć czy update działa?\");\r",
+							"    pm.expect(json.description).to.eql(\"Ciekawe jak to działa, a czy update działa?\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Przetestować clickup i zobaczyć czy update działa?\",\r\n    \"description\": \"Ciekawe jak to działa, a czy update działa?\",\r\n    \"status\": \"to do\",\r\n    \"priority\": null,\r\n    \"parent\": null,\r\n    \"time_estimate\": null,\r\n    \"assignees\": {},\r\n    \"archived\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/task/{{taskId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"task",
+						"{{taskId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Close task",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const json = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should return status complete\", function () {\r",
+							"    pm.expect(json.status.status).to.eql('complete');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Przetestować clickup i zobaczyć czy update działa?\",\r\n    \"description\": \"Ciekawe jak to działa, a czy update działa?\",\r\n    \"status\": \"complete\",\r\n    \"priority\": null,\r\n    \"parent\": null,\r\n    \"time_estimate\": null,\r\n    \"assignees\": {},\r\n    \"archived\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/task/{{taskId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"task",
+						"{{taskId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a Space",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const json = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should return empty object\", function () {\r",
+							"    pm.expect(json).to.be.empty;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/space/:id",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"space",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{spaceId}}"
+						}
+					]
+				},
+				"description": "Please paste the previously updated space_id for continuity"
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{token}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "Authorization",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "spaceId",
+			"value": ""
+		},
+		{
+			"key": "listId",
+			"value": ""
+		},
+		{
+			"key": "taskId",
+			"value": ""
+		}
+	]
+}
